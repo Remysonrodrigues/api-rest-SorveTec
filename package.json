@@ -1,0 +1,28 @@
+{
+  "name": "api-rest-sorvetec",
+  "version": "1.0.0",
+  "description": "API-REST para gerenciar um sistema de uma sorveteria",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Remysonrodrigues/api-rest-SorveTec.git"
+  },
+  "keywords": [
+    "NodeJS",
+    "MySQL",
+    "API-REST",
+    "SorveTec"
+  ],
+  "author": "Remyson Rodrigues",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Remysonrodrigues/api-rest-SorveTec/issues"
+  },
+  "homepage": "https://github.com/Remysonrodrigues/api-rest-SorveTec#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
