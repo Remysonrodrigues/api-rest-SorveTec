@@ -1,5 +1,10 @@
 {
     "env": {
+        "MYSQL_USER": "root",
+        "MYSQL_PASSWORD": "remyson123",
+        "MYSQL_DATABASE": "sorvetec",
+        "MYSQL_HOST": "localhost",
+
         "PORT": 3000
     }
 }
