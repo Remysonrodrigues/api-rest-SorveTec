@@ -13,7 +13,7 @@
   },
   "keywords": [
     "NodeJS",
-    "MySQL",
+    "MongoDB",
     "API-REST",
     "SorveTec"
   ],
@@ -28,8 +28,8 @@
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
-    "morgan": "^1.10.0",
-    "mysql": "^2.18.1"
+    "mongoose": "^5.9.10",
+    "morgan": "^1.10.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.3"

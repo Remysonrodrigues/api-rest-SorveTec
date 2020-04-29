@@ -4,9 +4,13 @@ const bodyParser = require('body-parser');
 
 const app = express();
 
+const rotaAutenticacao = require('./app/routes/autenticacao');
+
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
+app.use('/autenticacao', rotaAutenticacao);
 
 app.use( (req, res, next) => {
     const erro = new Error('Não encontrado');
