@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 
 mongoose.connect('mongodb://localhost/sorvetec',
     {
-        useMongoClient: true,
         useNewUrlParser: true,
         useUnifiedTopology: true
     },
