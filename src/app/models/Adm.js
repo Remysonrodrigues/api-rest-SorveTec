@@ -27,11 +27,9 @@ const AdmSchema = new mongoose.Schema({
     }
 });
 
-AdmSchema.pre('save', async (next) => {
-    await bcrypt.hash(this.senha, 10, (err, hash) => {
-        if (err) return;
-        this.senha = hash;
-    });
+AdmSchema.pre('save', async function (next){
+    const hash = await bcrypt.hash(this.senha, 10);
+    this.senha = hash;
     next();
 });
 
