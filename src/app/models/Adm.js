@@ -28,8 +28,10 @@ const AdmSchema = new mongoose.Schema({
 });
 
 AdmSchema.pre('save', async (next) => {
-    const hash = await bcrypt.hash(this.senha, 10);
-    this.senha = hash;
+    await bcrypt.hash(this.senha, 10, (err, hash) => {
+        if (err) return;
+        this.senha = hash;
+    });
     next();
 });
 

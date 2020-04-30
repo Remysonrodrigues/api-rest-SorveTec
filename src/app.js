@@ -4,13 +4,13 @@ const bodyParser = require('body-parser');
 
 const app = express();
 
-const rotaAdm = require('./app/routes/adm');
+const rotaAutenticacao = require('./app/routes/adm');
 
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.use('/', rotaAdm);
+app.use('/autenticacao', rotaAutenticacao);
 
 app.use( (req, res, next) => {
     const erro = new Error('Não encontrado');
