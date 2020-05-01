@@ -88,6 +88,36 @@ exports.ListarClientes = async (req, res) => {
 
 };
 
-exports.AtualizarCliente = async (req, res) => {};
+exports.AtualizarCliente = async (req, res) => {
 
-exports.DeletarCliente = async (req, res) => {};
+    const { nome, email, telefone } = req.body;
+    try {
+        
+        const cliente = await Cliente.findByIdAndUpdate(req.params.id_cliente, { nome, email, telefone }, { new: true });
+        if (!cliente) {
+            return res.status(400).send({ error: 'Id cliente inválido' });
+        }
+        return res.send(cliente);
+
+    } catch (err) {
+        
+        return res.status(400).send({ error: 'Erro ao atualizar cliente' });
+
+    }
+
+};
+
+exports.DeletarCliente = async (req, res) => {
+
+    try {
+        
+        await Cliente.findByIdAndRemove(req.params.id_cliente);
+        return res.status(200).send({ mensagem: 'Cliente deletado com sucesso' });
+
+    } catch (err) {
+        
+        return res.status(400).send({ error: 'Erro ao deletar cliente' });
+
+    }
+
+};

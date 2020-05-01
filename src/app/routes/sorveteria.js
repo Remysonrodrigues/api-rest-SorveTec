@@ -9,7 +9,7 @@ router.post('/', loginMiddleware, Sorveteria.Inicio);
 router.post('/cliente', loginMiddleware, Sorveteria.CadastrarCliente);
 router.get('/cliente/:id_sorveteria', loginMiddleware, Sorveteria.BuscarCliente);
 router.get('/clientes/:id_sorveteria', loginMiddleware, Sorveteria.ListarClientes);
-router.put('/cliente/:id_sorveteria', loginMiddleware, Sorveteria.AtualizarCliente);
-router.delete('/cliente/:id_sorveteria', loginMiddleware, Sorveteria.DeletarCliente);
+router.put('/cliente/:id_cliente', loginMiddleware, Sorveteria.AtualizarCliente); 
+router.delete('/cliente/:id_cliente', loginMiddleware, Sorveteria.DeletarCliente);
 
 module.exports = router;
