@@ -51,17 +51,42 @@ exports.BuscarCliente = async (req, res) => {
     try {
         
         const result = await Sorveteria.findById(req.params.id_sorveteria).populate(['sorveterias', 'clientes']);
-        return res.send( result.cliente );
-
+        if (!result) {
+            return res.status(404).send({ error: 'ADM não encontrado' });
+        }
+        await result.clientes.forEach( (cliente, indice) => {
+            if (cliente.email === req.body.email) {
+                return res.send(cliente);
+            }
+        });
+        return res.status(400).send({ error: 'Email do cliente não cadastrado' });
 
     } catch (err) {
-        console.log("ERRO: " + err);
+        
         return res.status(400).send({ error: 'Erro ao buscar um cliente' });
 
     }
+
 };
 
-exports.ListarClientes = async (req, res) => {};
+exports.ListarClientes = async (req, res) => {
+
+    try {
+        
+        const result = await Sorveteria.findById(req.params.id_sorveteria).populate(['sorveterias', 'clientes']);
+        if (!result) {
+            return res.status(404).send({ error: 'ADM não encontrado' });
+        }
+        const clientes = result.clientes;   
+        return res.send({ clientes });
+
+    } catch (err) {
+        
+        return res.status(400).send({ error: 'Erro ao listar clientes' });
+
+    }
+
+};
 
 exports.AtualizarCliente = async (req, res) => {};
 

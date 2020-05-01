@@ -8,8 +8,8 @@ router.post('/', loginMiddleware, Sorveteria.Inicio);
 
 router.post('/cliente', loginMiddleware, Sorveteria.CadastrarCliente);
 router.get('/cliente/:id_sorveteria', loginMiddleware, Sorveteria.BuscarCliente);
-router.get('/clientes', loginMiddleware, Sorveteria.ListarClientes);
-router.put('/cliente', loginMiddleware, Sorveteria.AtualizarCliente);
-router.delete('/cliente', loginMiddleware, Sorveteria.DeletarCliente);
+router.get('/clientes/:id_sorveteria', loginMiddleware, Sorveteria.ListarClientes);
+router.put('/cliente/:id_sorveteria', loginMiddleware, Sorveteria.AtualizarCliente);
+router.delete('/cliente/:id_sorveteria', loginMiddleware, Sorveteria.DeletarCliente);
 
 module.exports = router;
