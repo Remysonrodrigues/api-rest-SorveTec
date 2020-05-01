@@ -31,6 +31,7 @@ exports.Cadastro = async (req, res) => {
         
     const { email } = req.body;
     try {
+        
         if(await Adm.findOne({ email })) {
             return res.status(400).send({
                 error: 'ADM já existe'

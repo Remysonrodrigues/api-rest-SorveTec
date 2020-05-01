@@ -21,11 +21,7 @@ const SorveteriaSchema = new mongoose.Schema({
     vendas: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Venda'
-    }],
-    criadoEm: {
-        type: Date,
-        default: Date.now
-    }
+    }]
 });
 
 const Sorveteria = mongoose.model('Sorveteria', SorveteriaSchema);
