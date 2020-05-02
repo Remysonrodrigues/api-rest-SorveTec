@@ -12,4 +12,9 @@ router.get('/clientes/:id_sorveteria', loginMiddleware, Sorveteria.ListarCliente
 router.put('/cliente/:id_cliente', loginMiddleware, Sorveteria.AtualizarCliente); 
 router.delete('/cliente/:id_cliente', loginMiddleware, Sorveteria.DeletarCliente);
 
+router.post('/item', loginMiddleware, Sorveteria.CadastrarItem);
+router.get('/itens/:id_sorveteria', loginMiddleware, Sorveteria.ListarItens);
+router.put('/item/:id_item', loginMiddleware, Sorveteria.AtualizarItem); 
+router.delete('/item/:id_item', loginMiddleware, Sorveteria.DeletarItem);
+
 module.exports = router;

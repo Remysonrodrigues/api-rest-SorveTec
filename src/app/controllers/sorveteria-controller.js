@@ -26,15 +26,15 @@ exports.Inicio = async (req, res) => {
 
 exports.CadastrarCliente = async (req, res) => {
 
+    const { nome, email, telefone } = req.body;
     try {
 
-        const { nome, email, telefone } = req.body;
         const sorveteria = await Sorveteria.findOne({ adm: req.userId});
         if (!sorveteria) {
             return res.status(404).send({ error: 'ADM não encontrado' });
         }
-        const sorveteriaClientes = await Cliente.create({ nome, email, telefone });
-        sorveteria.clientes.push(sorveteriaClientes);
+        const sorveteriaCliente = await Cliente.create({ nome, email, telefone });
+        sorveteria.clientes.push(sorveteriaCliente);
         await sorveteria.save();
         return res.send({ sorveteria });
         
@@ -121,3 +121,48 @@ exports.DeletarCliente = async (req, res) => {
     }
 
 };
+
+exports.CadastrarItem = async (req, res) => {
+
+    const { nome, quantidade, nomeFornecedor, valor } = req.body;
+    try {
+        
+        const sorveteria = await Sorveteria.findOne({ adm: req.userId});
+        if (!sorveteria) {
+            return res.status(404).send({ error: 'ADM não encontrado' });
+        }
+        const item = await Item.create({ nome, quantidade, nomeFornecedor, valor });
+        sorveteria.itens.push(item);
+        await sorveteria.save();
+        return res.send({ sorveteria });
+
+    } catch (err) {
+        
+        return res.status(400).send({ error: 'Erro ao cadastrar um novo item' });
+
+    }
+
+};
+
+exports.ListarItens = async (req, res) => {
+
+    try {
+        
+        const result = await Sorveteria.findById(req.params.id_sorveteria).populate(['sorveterias', 'itens']);
+        if (!result) {
+            return res.status(404).send({ error: 'ADM não encontrado' });
+        }
+        const itens = result.itens;   
+        return res.send({ itens });
+
+    } catch (err) {
+        
+        return res.status(400).send({ error: 'Erro ao listar itens' });
+
+    }
+
+};
+
+exports.AtualizarItem = async (req, res) => {};
+
+exports.DeletarItem = async (req, res) => {};
