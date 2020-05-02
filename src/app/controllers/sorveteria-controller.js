@@ -163,6 +163,36 @@ exports.ListarItens = async (req, res) => {
 
 };
 
-exports.AtualizarItem = async (req, res) => {};
+exports.AtualizarItem = async (req, res) => {
 
-exports.DeletarItem = async (req, res) => {};
+    const { nome, quantidade, nomeFornecedor, valor } = req.body;
+    try {
+        
+        const item = await Item.findByIdAndUpdate(req.params.id_item, { nome, quantidade, nomeFornecedor, valor}, { new: true });
+        if (!item) {
+            return res.status(400).send({ error: 'Id item inválido' });
+        }
+        return res.send(item);
+
+    } catch (err) {
+        
+        return res.status(400).send({ error: 'Erro ao atualizar item' });
+
+    }
+
+};
+
+exports.DeletarItem = async (req, res) => {
+
+    try {
+        
+        await Item.findByIdAndRemove(req.params.id_item);
+        return res.status(200).send({ mensagem: 'Item deletado com sucesso' });
+
+    } catch (err) {
+        
+        return res.status(400).send({ error: 'Erro ao deletar item' });
+
+    }
+
+};
