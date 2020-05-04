@@ -226,32 +226,27 @@ exports.CalcularVenda = async (req, res) => {
 exports.BonificarCliente = async (req, res) => {
 
     const { email } = req.body;
-    try {
-        
-        const result = await Sorveteria.findById(req.params.id_sorveteria).populate(['sorveterias', 'clientes']);
-        if (!result) {
-            return res.status(404).send({ error: 'ADM não encontrado' });
-        }
-        await result.clientes.forEach( (cliente, indice) => {
-            if (cliente.email === email) {
-                const bonificacoes = cliente.bonificacoes += 1;
-                if (bonificacoes < result.maxBonificacoes) {
-                    Cliente.findByIdAndUpdate(cliente._id, { bonificacoes }, { new: true });
-                    return res.send({ mensagem: 'Cliente bonificado com sucesso' });
-                }
-                bonificacoes = 0;
-                Cliente.findByIdAndUpdate(cliente._id, { bonificacoes }, { new: true });
-                return res.send({ 
-                    mensagem: `Parabéns o cliente ${cliente.nome} atingiu o número máximo de bonificações` 
-                });
-            }
-        });
-        return res.status(400).send({ error: 'Email do cliente não cadastrado' });
-
-    } catch (err) {
-        
-        return res.status(400).send({ error: 'Erro ao bonificar cliente' });
-
+    const result = await Sorveteria.findById(req.params.id_sorveteria).populate(['sorveterias', 'clientes']);
+    if (!result) {
+        return res.status(404).send({ error: 'ADM não encontrado' });
     }
+    await Promise.all(result.clientes.forEach( async (cliente, indice) => {
+        if (cliente.email === email) {
+            let bonificacoes = cliente.bonificacoes += 1;
+            console.log('Bonificações: ' + bonificacoes);
+            console.log('Maximo Bonificações: ' + result.maxBonificacoes);
+            console.log('Id Cliente: ' + cliente._id);
+            if (bonificacoes < result.maxBonificacoes) {
+                await Cliente.findByIdAndUpdate(cliente._id, { bonificacoes }, { new: true });
+                return res.send({ mensagem: 'Cliente bonificado com sucesso' });
+            }
+            bonificacoes = 0;
+            await Cliente.findByIdAndUpdate(cliente._id, { bonificacoes }, { new: true });
+            return res.send({ 
+                mensagem: `Parabéns o cliente ${cliente.nome} atingiu o número máximo de bonificações` 
+            });
+        }
+    }));
+    return res.status(400).send({ error: 'Email do cliente não cadastrado' });
 
 };
