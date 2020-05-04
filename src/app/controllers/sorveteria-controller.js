@@ -5,11 +5,11 @@ const Venda = require('../models/Venda');
 
 exports.Inicio = async (req, res) => {
     
-    const { valorKilo } = req.body;
+    const { valorKilo, maxBonificacoes } = req.body;
     try {
         const sorveteria = await Sorveteria.findOne({ adm: req.userId });
         if (!sorveteria) {
-            sorveteria = await Sorveteria.create({ valorKilo, adm: req.userId });
+            sorveteria = await Sorveteria.create({ valorKilo, maxBonificacoes, adm: req.userId });
             await sorveteria.save();
             return res.send({ sorveteria });
         }
@@ -235,8 +235,15 @@ exports.BonificarCliente = async (req, res) => {
         await result.clientes.forEach( (cliente, indice) => {
             if (cliente.email === email) {
                 const bonificacoes = cliente.bonificacoes += 1;
+                if (bonificacoes < result.maxBonificacoes) {
+                    Cliente.findByIdAndUpdate(cliente._id, { bonificacoes }, { new: true });
+                    return res.send({ mensagem: 'Cliente bonificado com sucesso' });
+                }
+                bonificacoes = 0;
                 Cliente.findByIdAndUpdate(cliente._id, { bonificacoes }, { new: true });
-                return res.send({ mensagem: 'Cliente bonificado com sucesso' });
+                return res.send({ 
+                    mensagem: `Parabéns o cliente ${cliente.nome} atingiu o número máximo de bonificações` 
+                });
             }
         });
         return res.status(400).send({ error: 'Email do cliente não cadastrado' });

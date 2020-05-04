@@ -5,6 +5,10 @@ const SorveteriaSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    maxBonificacoes: {
+        type: Number,
+        required: true
+    },
     adm: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Adm',
