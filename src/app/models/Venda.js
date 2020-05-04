@@ -5,7 +5,7 @@ const VendaSchema = new mongoose.Schema({
         type: Number,
         default: 0.0
     },
-    OutrosItens: {
+    outrosItens: {
         type: Number,
         default: 0.0
     },
@@ -15,7 +15,8 @@ const VendaSchema = new mongoose.Schema({
     },
     valorFinal: {
         type: Number,
-        default: 0.0
+        default: 0.0,
+        required: true
     }
 });
 

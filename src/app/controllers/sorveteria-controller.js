@@ -196,3 +196,29 @@ exports.DeletarItem = async (req, res) => {
     }
 
 };
+
+exports.CalcularVenda = async (req, res) => {
+
+    const { pesoSorvete, outrosItens} = req.body;
+    let valorFinal = 0.0;
+    try {
+        
+        const sorveteria = await Sorveteria.findOne({ adm: req.userId});
+        if (!sorveteria) {
+            return res.status(404).send({ error: 'ADM não encontrado' });
+        }
+        const valorKilo = sorveteria.valorKilo;
+        valorFinal = (pesoSorvete * valorKilo) / 1000;
+        valorFinal += outrosItens;
+        const venda = await Venda.create({ pesoSorvete, outrosItens, valorFinal });
+        sorveteria.vendas.push(venda);
+        await sorveteria.save();
+        return res.send({ valorFinal });
+
+    } catch (err) {
+        
+        return res.status(400).send({ error: 'Erro ao calcular o valor da venda' });
+
+    }
+
+};
