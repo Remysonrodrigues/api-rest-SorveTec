@@ -222,3 +222,29 @@ exports.CalcularVenda = async (req, res) => {
     }
 
 };
+
+exports.BonificarCliente = async (req, res) => {
+
+    const { email } = req.body;
+    try {
+        
+        const result = await Sorveteria.findById(req.params.id_sorveteria).populate(['sorveterias', 'clientes']);
+        if (!result) {
+            return res.status(404).send({ error: 'ADM não encontrado' });
+        }
+        await result.clientes.forEach( (cliente, indice) => {
+            if (cliente.email === email) {
+                const bonificacoes = cliente.bonificacoes += 1;
+                Cliente.findByIdAndUpdate(cliente._id, { bonificacoes }, { new: true });
+                return res.send({ mensagem: 'Cliente bonificado com sucesso' });
+            }
+        });
+        return res.status(400).send({ error: 'Email do cliente não cadastrado' });
+
+    } catch (err) {
+        
+        return res.status(400).send({ error: 'Erro ao bonificar cliente' });
+
+    }
+
+};

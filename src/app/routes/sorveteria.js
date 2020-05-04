@@ -19,4 +19,6 @@ router.delete('/item/:id_item', loginMiddleware, Sorveteria.DeletarItem);
 
 router.post('/venda', loginMiddleware, Sorveteria.CalcularVenda);
 
+router.post('/bonificar/:id_sorveteria', loginMiddleware, Sorveteria.BonificarCliente);
+
 module.exports = router;
