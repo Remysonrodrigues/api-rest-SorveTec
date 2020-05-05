@@ -2,6 +2,8 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const tokenKeyConfig = require('../../config/tokenKey.json');
 const Adm = require('../models/Adm');
+const mailer = require('../../modules/mailer');
+const crypto = require('crypto');
 
 function gerarToken(params = {}){
     return jwt.sign(params, tokenKeyConfig.secrete, {
@@ -51,6 +53,10 @@ exports.Cadastro = async (req, res) => {
     }
 };
 
-// exports.EsqueceuSenha = async (req, res) => {};
+exports.EsqueceuSenha = async (req, res) => {
 
-// exports.RedefinirSenha = async (req, res) => {};
+    
+
+};
+
+exports.RedefinirSenha = async (req, res) => {};
