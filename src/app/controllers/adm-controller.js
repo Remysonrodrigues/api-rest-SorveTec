@@ -65,7 +65,7 @@ exports.EsqueceuSenha = async (req, res) => {
         const token = crypto.randomBytes(20).toString('hex');
         const now = new Date();
         now.setHours(now.getHours() + 1);
-        await Adm.findByIdAndUpdate(user.id, {
+        await Adm.findByIdAndUpdate(adm._id, {
             '$set': {
                 senhaRedefinirToken: token,
                 senhaRedefinirExpira: now
@@ -80,16 +80,42 @@ exports.EsqueceuSenha = async (req, res) => {
             if (err) {
                 return res.status(400).send({ error: 'Não é possivel enviar o email com a senha esquecida' });
             }
-            return res.send();
+            return res.send({ mensagem: 'Token enviado para o email informado' });
         });
 
 
     } catch (err) {
-        
+        console.log("Erro: " + err);
         return res.status(400).send({ error: 'Erro ao esquecer a senha, tente novamente' });
 
     }
 
 };
 
-exports.RedefinirSenha = async (req, res) => {};
+exports.RedefinirSenha = async (req, res) => {
+
+    const { email, token, senha } = req.body;
+    try {
+        
+        const adm = await Adm.findOne({ email }).select('+senhaRedefinirToken senhaRedefinirExpira');
+        if (!adm) {
+            return res.status(400).send({ error: 'Usuário não encontrado' });
+        }
+        if (token !== adm.senhaRedefinirToken) {
+            return res.status(400).send({ error: 'Token inválido' });
+        }
+        const now = new Date();
+        if (now > adm.senhaRedefinirExpira) {
+            return res.status(400).send({ error: 'O token expirou, gere um novo' });
+        }
+        adm.senha = senha;
+        await adm.save();
+        res.send({ mensagem: 'Senha alterada com sucesso' });
+
+    } catch (err) {
+        console.log("Erro: " + err);
+        return res.status(400).send({ error: 'Não é possivel redefinir a senha, tente novamente' });
+
+    }
+
+};
