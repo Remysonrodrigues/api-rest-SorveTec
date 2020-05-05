@@ -55,7 +55,40 @@ exports.Cadastro = async (req, res) => {
 
 exports.EsqueceuSenha = async (req, res) => {
 
-    
+    const { email } = req.body;
+    try {
+        
+        const adm = await Adm.findOne({ email });
+        if (!adm) {
+            return res.status(400).send({ error: 'Usuário não encontrado' });
+        }
+        const token = crypto.randomBytes(20).toString('hex');
+        const now = new Date();
+        now.setHours(now.getHours() + 1);
+        await Adm.findByIdAndUpdate(user.id, {
+            '$set': {
+                senhaRedefinirToken: token,
+                senhaRedefinirExpira: now
+            }
+        });
+        mailer.sendMail({
+            to: email,
+            from: 'remysonrodrigues@gmail.com',
+            template: 'esqueceu_senha',
+            context: { token }
+        }, (err) => {
+            if (err) {
+                return res.status(400).send({ error: 'Não é possivel enviar o email com a senha esquecida' });
+            }
+            return res.send();
+        });
+
+
+    } catch (err) {
+        
+        return res.status(400).send({ error: 'Erro ao esquecer a senha, tente novamente' });
+
+    }
 
 };
 
