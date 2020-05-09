@@ -233,9 +233,6 @@ exports.BonificarCliente = async (req, res) => {
     await Promise.all(result.clientes.forEach( async (cliente, indice) => {
         if (cliente.email === email) {
             let bonificacoes = cliente.bonificacoes += 1;
-            console.log('Bonificações: ' + bonificacoes);
-            console.log('Maximo Bonificações: ' + result.maxBonificacoes);
-            console.log('Id Cliente: ' + cliente._id);
             if (bonificacoes < result.maxBonificacoes) {
                 await Cliente.findByIdAndUpdate(cliente._id, { bonificacoes }, { new: true });
                 return res.send({ mensagem: 'Cliente bonificado com sucesso' });
@@ -248,5 +245,36 @@ exports.BonificarCliente = async (req, res) => {
         }
     }));
     return res.status(400).send({ error: 'Email do cliente não cadastrado' });
+
+};
+
+exports.Relatorio = async (req, res) => {
+
+    try {
+
+        const sorveteria = await Sorveteria.findOne({ adm: req.userId}).populate(['sorveterias', 'itens', 'vendas']);
+        if (!sorveteria) {
+            return res.status(404).send({ error: 'ADM não encontrado' });
+        }
+        let valorEstoque = 0.0;
+        sorveteria.itens.forEach( (item, indece) => {
+           valorEstoque += (item.valor * item.quantidade);
+        });
+        let valorVendas = 0.0;
+        sorveteria.vendas.forEach( (venda, indece) => {
+            valorVendas += venda.valorFinal;
+         });
+        return res.send({ 
+            Relatorio: {
+                Vendas: valorVendas,
+                Estoque: valorEstoque
+            } 
+        });
+        
+    } catch (err) {
+        
+        return res.status(400).send({ error: 'Erro ao gerar relátorio' });
+
+    }
 
 };
